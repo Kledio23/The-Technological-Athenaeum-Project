@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalog</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            background: url('static/b5.jpg') no-repeat center center fixed; /* Background image */
+            background-size: cover; /* Ensure the background covers the entire page */
+            height: 100vh;
+            color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            width: 60%; /* Smaller width */
+            max-width: 800px; /* Maximum width */
+            background-color: rgba(255, 255, 255, 0.85); /* Less translucent background */
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+        .header-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .header-content img {
+            margin: 0 10px;
+            border: 5px solid white;
+            width: 80px; /* Square image size */
+            height: 80px; /* Square image size */
+        }
+        h1 {
+            margin-bottom: 30px;
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+        }
+        .logout-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        form {
+            margin-bottom: 30px;
+        }
+        input[type="text"] {
+            padding: 12px 18px;
+            width: 70%;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            transition: border 0.3s;
+        }
+        input[type="text"]:focus {
+            border-color: #a30016;
+            outline: none;
+        }
+        button {
+            padding: 12px 30px;
+            background-color: #a30016;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background-color: red;
+            transform: scale(1.05);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        tr:hover {
+            background-color: #f9f9f9;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        td button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        td button:hover {
+            background-color: #45a049;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+        }
+        .back-btn button {
+            background-color: #333;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+        .back-btn button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-content">
+            <img src="static/msu.png" alt="MSU logo">
+        </div>
+        <h1>Library Catalog</h1>
+        <a href="/logout" class="logout-link">Logout</a>
+
+        <form action="/catalog" method="post">
+            <input type="text" name="search" placeholder="Search for a book...">
+            <button type="submit">Search</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ISBN</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Availability</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in books %}
+                    <tr>
+                        <td>{{ book[0] }}</td>
+                        <td>{{ book[1] }}</td>
+                        <td>{{ book[2] }}</td>
+                        <td>
+                            {% if book[3] == 'available' %}
+                                Available
+                            {% elif book[3] == 'reserved' %}
+                                Reserved
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if book[3] == 'available' %}
+                                <form action="{{ url_for('reserve_book', isbn=book[0]) }}" method="post">
+                                    <button type="submit">Reserve</button>
+                                </form>
+                            {% elif book[3] == 'reserved' %}
+                                {% if book[4] == session['username'] %}
+                                    <form action="{{ url_for('return_book', isbn=book[0]) }}" method="post">
+                                        <button type="submit">Return</button>
+                                    </form>
+                                {% else %}
+                                    Reserved
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ url_for('dashboard') }}" class="back-btn">
+            <button>Go Back to Dashboard</button>
+        </a>
+    </div>
+</body>
+</html>
