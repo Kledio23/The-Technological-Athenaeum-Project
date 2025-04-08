@@ -1,0 +1,96 @@
+<!-- templates/my_books.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Books</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #a30016;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            margin: 20px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .book-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .book-item {
+            background-color: #ffffff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .book-item h2 {
+            font-size: 22px;
+            margin: 0;
+            color: #333;
+        }
+
+        .book-item p {
+            color: #666;
+        }
+
+        .back-btn {
+            margin-top: 20px;
+            background-color: #a30016;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            background-color: #a30016;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>My Reserved Books</h1>
+    </header>
+
+    <div class="container">
+        <h2>Books You Have Reserved:</h2>
+        {% if books %}
+            <ul class="book-list">
+                {% for book in books %}
+                    <li class="book-item">
+                        <h2>{{ book[0] }}</h2>  <!-- Book title -->
+                        <p><strong>Author:</strong> {{ book[1] }}</p>  <!-- Book author -->
+                        <p><strong>ISBN:</strong> {{ book[2] }}</p>    <!-- Book ISBN -->
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You have not reserved any books yet.</p>
+        {% endif %}
+        <a href="{{ url_for('dashboard') }}" class="back-btn">Back to Dashboard</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Include your CSS file here -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #4CAF50;
+            padding: 10px 20px;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: white;
+            padding: 20px;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        .user-table th, .user-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .user-table th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .user-table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .form-container {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .form-container input[type="text"], 
+        .form-container input[type="email"], 
+        .form-container input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .form-container button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+        .form-container .cancel-btn {
+            background-color: #f44336;
+        }
+        .form-container .cancel-btn:hover {
+            background-color: #e53935;
+        }
+        .action-btns {
+            display: flex;
+            justify-content: flex-start;
+            gap: 10px;
+        }
+        .action-btns button {
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .action-btns .edit-btn {
+            background-color: #ffa500;
+            color: white;
+        }
+        .action-btns .delete-btn {
+            background-color: #f44336;
+            color: white;
+        }
+        .action-btns .edit-btn:hover {
+            background-color: #ff8c00;
+        }
+        .action-btns .delete-btn:hover {
+            background-color: #e53935;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>User Management</h1>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h3>Dashboard</h3>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('catalog') }}">Catalog</a>
+            <a href="{{ url_for('my_books') }}">My Books</a>
+            <a href="{{ url_for('notifications') }}">Notifications</a>
+            <a href="{{ url_for('upcoming_events') }}">Upcoming Events</a>
+            <a href="{{ url_for('user_management') }}" class="active">User Management</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+
+        <!-- Content Section -->
+        <div class="content">
+            <h2>Manage Users</h2>
+            <p>Here you can view, add, update, or delete user accounts.</p>
+
+            <!-- Add User Form -->
+            <div class="form-container">
+                <h3>Add New User</h3>
+                <form action="{{ url_for('add_user') }}" method="POST">
+                    <input type="text" name="username" placeholder="Username" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <button type="submit">Add User</button>
+                    <button type="button" class="cancel-btn" onclick="window.location.href='{{ url_for('user_management') }}'">Cancel</button>
+                </form>
+            </div>
+
+            <!-- Users Table -->
+            <h3>Existing Users</h3>
+            <table class="user-table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td class="action-btns">
+                            <a href="{{ url_for('edit_user', user_id=user.id) }}">
+                                <button class="edit-btn">Edit</button>
+                            </a>
+                            <a href="{{ url_for('delete_user', user_id=user.id) }}">
+                                <button class="delete-btn">Delete</button>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

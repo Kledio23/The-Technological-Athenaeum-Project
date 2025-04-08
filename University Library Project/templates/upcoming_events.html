@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming Events</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Include your CSS file here -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #4CAF50;
+            padding: 10px 20px;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: white;
+            padding: 20px;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+        .events {
+            flex-grow: 1;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .event-item {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 5px solid #4CAF50;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .event-item h4 {
+            margin: 0;
+            font-size: 20px;
+            color: #333;
+        }
+        .event-item p {
+            color: #666;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .event-item .event-date {
+            font-size: 14px;
+            color: #888;
+        }
+        .event-item .event-location {
+            font-size: 14px;
+            color: #555;
+            font-style: italic;
+        }
+        .event-item .register-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        .event-item .register-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Upcoming Events</h1>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h3>Dashboard</h3>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('catalog') }}">Catalog</a>
+            <a href="{{ url_for('my_books') }}">My Books</a>
+            <a href="{{ url_for('notifications') }}">Notifications</a>
+            <a href="{{ url_for('upcoming_events') }}" class="active">Upcoming Events</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+
+        <!-- Events Content -->
+        <div class="events">
+            <div class="event-item">
+                <h4>Library Workshop: How to Search Effectively</h4>
+                <p>Join us for a workshop where you'll learn the best techniques to search for resources in the library catalog.</p>
+                <p class="event-date">Date: April 15, 2025</p>
+                <p class="event-location">Location: Main Library Conference Room</p>
+                <a href="#" class="register-btn">Register Now</a>
+            </div>
+
+            <div class="event-item">
+                <h4>Book Club: Monthly Discussion</h4>
+                <p>Participate in our monthly book club discussion where we'll talk about this month's read: "The Great Gatsby."</p>
+                <p class="event-date">Date: April 20, 2025</p>
+                <p class="event-location">Location: Library Lounge</p>
+                <a href="#" class="register-btn">Register Now</a>
+            </div>
+
+            <div class="event-item">
+                <h4>Summer Reading Program Sign-up</h4>
+                <p>Sign up for the Summer Reading Program and receive exclusive access to summer events, activities, and reading lists!</p>
+                <p class="event-date">Date: May 1, 2025</p>
+                <p class="event-location">Location: Online</p>
+                <a href="#" class="register-btn">Register Now</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

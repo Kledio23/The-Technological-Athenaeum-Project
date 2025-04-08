@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+    <link rel="stylesheet" href="styles.css">  <!-- You can include your CSS file here -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #4CAF50;
+            padding: 10px 20px;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: white;
+            padding: 20px;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+        .notifications {
+            flex-grow: 1;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .notification-item {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-left: 5px solid #4CAF50;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .notification-item h4 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+        .notification-item p {
+            color: #666;
+        }
+        .notification-item .timestamp {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Notifications</h1>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h3>Dashboard</h3>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('catalog') }}">Catalog</a>
+            <a href="{{ url_for('my_books') }}">My Books</a>
+            <a href="{{ url_for('notifications') }}" class="active">Notifications</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+
+        <!-- Notifications Content -->
+        <div class="notifications">
+            <div class="notification-item">
+                <h4>New Book Reserved</h4>
+                <p>You have successfully reserved the book "1984" by George Orwell.</p>
+                <p class="timestamp">5 minutes ago</p>
+            </div>
+
+            <div class="notification-item">
+                <h4>Book Availability Update</h4>
+                <p>The book "Fahrenheit 451" is now available for borrowing.</p>
+                <p class="timestamp">1 hour ago</p>
+            </div>
+
+            <div class="notification-item">
+                <h4>Book Return Reminder</h4>
+                <p>Don't forget to return "To Kill a Mockingbird" by Harper Lee tomorrow.</p>
+                <p class="timestamp">3 days ago</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
