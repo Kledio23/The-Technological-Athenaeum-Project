@@ -143,5 +143,50 @@ def my_books():
 
     return render_template('my_books.html', books=books)
 
+@app.route('/notifications')
+def notifications():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    return render_template('notifications.html')
+
+@app.route('/upcoming-events')
+def upcoming_events():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    return render_template('upcoming_events.html')
+
+@app.route('/account')
+def manage_account():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    return render_template('manage_account.html')
+
+@app.route('/edit-account', methods=['GET', 'POST'])
+def edit_account():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        current_password = request.form['current_password']
+        new_password = request.form['new_password']
+
+        conn = sqlite3.connect('users.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users WHERE username = ?", (session['username'],))
+        user = cursor.fetchone()
+
+        if user and user[1] == current_password:
+            cursor.execute("UPDATE users SET password = ? WHERE username = ?", (new_password, session['username']))
+            conn.commit()
+            conn.close()
+            return render_template('edit_account.html', message="Password successfully updated.")
+
+        conn.close()
+        return render_template('edit_account.html', error="Current password is incorrect. Please try again.")
+    
+    return render_template('edit_account.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
