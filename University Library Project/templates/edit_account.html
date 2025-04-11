@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Account</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #a30016;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #a30016;
+            color: white;
+            padding: 20px;
+        }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .sidebar a:hover {
+            background-color: #7a0015;
+        }
+
+        .account-edit {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            margin-left: 20px;
+            padding: 20px;
+        }
+
+        .btn {
+            background-color: #a30016;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: inline-block;
+            width: auto;
+        }
+
+        .btn:hover {
+            background-color: #7a0015;
+            transform: scale(1.05);
+        }
+
+        .error, .success {
+            color: red;
+            font-weight: bold;
+        }
+
+        .success {
+            color: green;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        input {
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            max-width: 400px;
+            width: 100%;
+            margin: 0 auto 15px auto;
+        }
+
+        input[type="password"] {
+            width: 100%;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Edit Your Account</h1>
+    </header>
+
+    <div class="container">
+        <div class="sidebar">
+            <h3>Dashboard</h3>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('catalog') }}">Catalog</a>
+            <a href="{{ url_for('my_books') }}">My Books</a>
+            <a href="{{ url_for('notifications') }}">Notifications</a>
+            <a href="{{ url_for('upcoming_events') }}">Upcoming Events</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+
+        <div class="account-edit">
+            <h2>Change Your Password</h2>
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+            {% if message %}
+                <p class="success">{{ message }}</p>
+            {% endif %}
+            <form method="POST">
+                <label for="current_password">Current Password:</label>
+                <input type="password" name="current_password" required>
+
+                <label for="new_password">New Password:</label>
+                <input type="password" name="new_password" required>
+
+                <label for="confirm_password">Confirm New Password:</label>
+                <input type="password" name="confirm_password" required>
+
+                <button type="submit" class="btn">Update Password</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
