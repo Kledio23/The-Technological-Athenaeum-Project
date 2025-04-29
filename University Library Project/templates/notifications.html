@@ -4,106 +4,185 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notifications</title>
-    <link rel="stylesheet" href="styles.css">  <!-- You can include your CSS file here -->
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+    <link rel="stylesheet" href="styles.css">
+    <style>   
+        html, body {
             margin: 0;
             padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('{{ url_for('static', filename='b5.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
-        .header {
-            background-color: #4CAF50;
-            padding: 10px 20px;
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            z-index: -1;
+        }
+
+        body {
+            direction: ltr;
+            scrollbar-width: thick;
+            scrollbar-color: #a30016 #f0f0f0;
+        }
+
+        body::-webkit-scrollbar {
+            width: 16px;
+        }
+
+        body::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+        }
+
+        body::-webkit-scrollbar-thumb {
+            background-color: #a30016;
+            border-radius: 10px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        body::-webkit-scrollbar-thumb:hover {
+            background-color: #8b0013;
+        }
+
+        .top-bar {
+            width: 100%;
+            height: 90px;
+            background-color: #a30016;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .top-bar h1 {
             color: white;
-            text-align: center;
+            font-size: 36px;
+            margin: 0;
         }
+
         .container {
             display: flex;
-            justify-content: space-between;
-            padding: 20px;
+            min-height: calc(100vh - 90px);
+            position: relative;
+            z-index: 1;
         }
+
         .sidebar {
-            width: 250px;
-            background-color: #333;
+            width: 260px;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sidebar button {
+            width: 100%;
+            padding: 15px 20px;
+            background-color: #a30016;
             color: white;
-            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            outline: none;
         }
-        .sidebar a {
-            color: white;
-            text-decoration: none;
-            display: block;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
+
+        .sidebar button:hover {
+            background-color: #d3011c;
+            border-color: #999;
         }
-        .sidebar a:hover {
-            background-color: #575757;
-        }
-        .notifications {
+
+        .main-content {
             flex-grow: 1;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 40px 50px;
+            overflow-y: auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            margin: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
+
         .notification-item {
-            background-color: #f9f9f9;
-            padding: 10px;
-            margin-bottom: 15px;
-            border-left: 5px solid #4CAF50;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 8px solid #a30016;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
         }
+
+        .notification-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+        }
+
         .notification-item h4 {
             margin: 0;
-            font-size: 18px;
+            font-size: 24px;
             color: #333;
         }
+
         .notification-item p {
-            color: #666;
+            color: #555;
+            font-size: 16px;
+            margin-top: 10px;
         }
+
         .notification-item .timestamp {
-            font-size: 12px;
+            font-size: 13px;
             color: #888;
-            margin-top: 5px;
+            margin-top: 12px;
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
+    <div class="top-bar">
         <h1>Notifications</h1>
     </div>
 
     <div class="container">
-        <!-- Sidebar -->
         <div class="sidebar">
-            <h3>Dashboard</h3>
-            <a href="{{ url_for('dashboard') }}">Dashboard</a>
-            <a href="{{ url_for('catalog') }}">Catalog</a>
-            <a href="{{ url_for('my_books') }}">My Books</a>
-            <a href="{{ url_for('notifications') }}" class="active">Notifications</a>
-            <a href="{{ url_for('logout') }}">Logout</a>
+      <a href="{{ url_for('dashboard') }}"><button>Dashboard</button></a>
+      <a href="{{ url_for('catalog') }}"><button>Catalog</button></a>
+      <a href="/my-books"><button>My Books</button></a>
+      <a href="{{ url_for('upcoming_events') }}"><button>Upcoming Events</button></a>
+      <a href="/account"><button>Manage Account</button></a>
+      <a href="{{ url_for('logout') }}"><button>Logout</button></a>
         </div>
 
-        <!-- Notifications Content -->
-        <div class="notifications">
+        <div class="main-content">
             <div class="notification-item">
-                <h4>New Book Reserved</h4>
-                <p>You have successfully reserved the book "1984" by George Orwell.</p>
-                <p class="timestamp">5 minutes ago</p>
+                <h4>Library Workshop: How to Search Effectively</h4>
+                <p>Join us for a workshop where you'll learn the best techniques to search for resources in the library catalog.</p>
+                <p class="timestamp">Date: April 15, 2025</p>
             </div>
 
             <div class="notification-item">
-                <h4>Book Availability Update</h4>
-                <p>The book "Fahrenheit 451" is now available for borrowing.</p>
-                <p class="timestamp">1 hour ago</p>
+                <h4>Book Club: Monthly Discussion</h4>
+                <p>Participate in our monthly book club discussion where we'll talk about this month's read: "The Great Gatsby."</p>
+                <p class="timestamp">Date: April 20, 2025</p>
             </div>
 
             <div class="notification-item">
-                <h4>Book Return Reminder</h4>
-                <p>Don't forget to return "To Kill a Mockingbird" by Harper Lee tomorrow.</p>
-                <p class="timestamp">3 days ago</p>
+                <h4>Summer Reading Program Sign-up</h4>
+                <p>Sign up for the Summer Reading Program and receive exclusive access to summer events, activities, and reading lists!</p>
+                <p class="timestamp">Date: May 1, 2025</p>
             </div>
         </div>
     </div>
