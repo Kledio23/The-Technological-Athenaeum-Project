@@ -4,46 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Account</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            font-family: 'Poppins', sans-serif;
+            background: #f8f9fa;
             margin: 0;
             padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         header {
-            background-color: #a30016;
-            padding: 20px;
-            color: white;
+            background: linear-gradient(90deg, #a30016, #d4001f);
+            padding: 30px 20px;
             text-align: center;
+            color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .container {
+        .layout {
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 20px;
+            flex: 1;
+            min-height: calc(100vh - 90px);
         }
 
         .sidebar {
-            width: 250px;
-            background-color: #a30016;
-            color: white;
-            padding: 20px;
+            width: 240px;
+            background-color: rgba(0, 0, 0, 0.85);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
         .sidebar a {
-            color: white;
             text-decoration: none;
-            display: block;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
+            color: white;
         }
 
-        .sidebar a:hover {
-            background-color: #7a0015;
+        .sidebar button {
+            width: 100%;
+            padding: 12px 20px;
+            background-color: #a30016;
+            color: white;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .sidebar button:hover,
+        .sidebar .active {
+            background-color: #d3011c;
+            border-color: #999;
+        }
+
+        .container {
+            flex: 1;
+            padding: 40px;
+            max-width: 100%;
         }
 
         .account-edit {
@@ -114,38 +136,45 @@
         <h1>Edit Your Account</h1>
     </header>
 
-    <div class="container">
+    <div class="layout">
+
         <div class="sidebar">
-            <h3>Dashboard</h3>
-            <a href="{{ url_for('dashboard') }}">Dashboard</a>
-            <a href="{{ url_for('catalog') }}">Catalog</a>
-            <a href="{{ url_for('my_books') }}">My Books</a>
-            <a href="{{ url_for('notifications') }}">Notifications</a>
-            <a href="{{ url_for('upcoming_events') }}">Upcoming Events</a>
-            <a href="{{ url_for('logout') }}">Logout</a>
+            {% if session.get('role') == 'admin' %}
+                <a href="{{ url_for('admin_dashboard') }}"><button>Admin Dashboard</button></a>
+            {% endif %}
+            <a href="{{ url_for('dashboard') }}"><button>Dashboard</button></a>
+            <a href="{{ url_for('catalog') }}"><button>Catalog</button></a>
+            <a href="{{ url_for('my_books') }}"><button>My Books</button></a>
+            <a href="{{ url_for('notifications') }}"><button>Notifications</button></a>
+            <a href="{{ url_for('upcoming_events') }}"><button>Upcoming Events</button></a>
+            <a href="{{ url_for('edit_account') }}"><button>Manage Account</button></a>
+            <a href="{{ url_for('logout') }}"><button>Logout</button></a>
         </div>
 
-        <div class="account-edit">
-            <h2>Change Your Password</h2>
-            {% if error %}
-                <p class="error">{{ error }}</p>
-            {% endif %}
-            {% if message %}
-                <p class="success">{{ message }}</p>
-            {% endif %}
-            <form method="POST">
-                <label for="current_password">Current Password:</label>
-                <input type="password" name="current_password" required>
+        <div class="container">
+            <div class="account-edit">
+                <h2>Change Your Password</h2>
+                {% if error %}
+                    <p class="error">{{ error }}</p>
+                {% endif %}
+                {% if message %}
+                    <p class="success">{{ message }}</p>
+                {% endif %}
+                <form method="POST">
+                    <label for="current_password">Current Password:</label>
+                    <input type="password" name="current_password" required>
 
-                <label for="new_password">New Password:</label>
-                <input type="password" name="new_password" required>
+                    <label for="new_password">New Password:</label>
+                    <input type="password" name="new_password" required>
 
-                <label for="confirm_password">Confirm New Password:</label>
-                <input type="password" name="confirm_password" required>
+                    <label for="confirm_password">Confirm New Password:</label>
+                    <input type="password" name="confirm_password" required>
 
-                <button type="submit" class="btn">Update Password</button>
-            </form>
+                    <button type="submit" class="btn">Update Password</button>
+                </form>
+            </div>
         </div>
+
     </div>
 
 </body>
