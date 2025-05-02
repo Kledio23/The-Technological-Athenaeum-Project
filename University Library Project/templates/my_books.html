@@ -142,22 +142,24 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-      <a href="{{ url_for('dashboard') }}"><button>Dashboard</button></a>
-      <a href="{{ url_for('catalog') }}"><button>Catalog</button></a>
-      <a href="{{ url_for('upcoming_events') }}"><button>Upcoming Events</button></a>
-      <a href="/notifications"><button>Notifications</button></a>
-  
-      <a href="/account"><button>Manage Account</button></a>
-      <a href="{{ url_for('logout') }}"><button>Logout</button></a>
+        {% if session.get('role') == 'admin' %}
+            <a href="{{ url_for('admin_dashboard') }}"><button>Admin Dashboard</button></a>
+        {% endif %}
+        <a href="{{ url_for('dashboard') }}"><button>Dashboard</button></a>
+        <a href="{{ url_for('catalog') }}"><button>Catalog</button></a>
+        <a href="{{ url_for('notifications') }}"><button>Notifications</button></a>
+        <a href="{{ url_for('upcoming_events') }}"><button>Upcoming Events</button></a>
+        <a href="{{ url_for('edit_account') }}"><button>Manage Account</button></a>
+        <a href="{{ url_for('logout') }}"><button>Logout</button></a>
     </div>
-
+    
     <!-- Main Content -->
     <div class="container">
       {% if books %}
         <ul class="book-list">
           {% for book in books %}
             <li class="book-item">
-              <img src="{{ book[3] }}" alt="Book Cover">
+              <img src="https://covers.openlibrary.org/b/isbn/{{ book[2] }}-L.jpg" alt="Book Cover">
               <h2>{{ book[0] }}</h2>
               <p><strong>Author:</strong> {{ book[1] }}</p>
               <p><strong>ISBN:</strong> {{ book[2] }}</p>
