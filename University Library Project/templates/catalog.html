@@ -5,16 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Library Catalog</title>
   <style>
+    /* background */
     html, body {
       margin: 0;
       padding: 0;
-      overflow: hidden; /* disable page scroll */
+      overflow: hidden;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-image: url('static/b5.jpg');
       background-size: cover;
       background-position: center;
     }
 
+    /* Main white container */
     .container {
       width: 90%;
       max-width: 1100px;
@@ -25,8 +27,74 @@
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
       padding: 25px 30px;
       overflow-y: auto;
+      position: relative;
+      z-index: 1;
     }
 
+    /* Floating menu button on left */
+    .menu-btn {
+      position: fixed;
+      top: 5%;
+      left: 10px;
+      transform: translateY(-50%);
+      background-color: #a30016;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    /* Popup overlay */
+    .popup-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      overflow: hidden;
+      transition: width 0.3s ease;
+      z-index: 1000;
+    }
+    .popup-menu.active {
+      width: 240px;
+    }
+
+    /* Popup content (buttons) */
+    .popup-content {
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      gap: 15px;
+    }
+    .popup-content .close-btn {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 2rem;
+      align-self: flex-end;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    .popup-content a button {
+      width: 100%;
+      padding: 12px;
+      background-color: #a30016;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .popup-content a button:hover {
+      background-color: #d3011c;
+    }
+
+    /* Page header */
     h1 {
       display: flex;
       align-items: center;
@@ -35,16 +103,15 @@
       color: #a30016;
       margin-bottom: 20px;
     }
-
     h1 img {
       margin-right: 20px;
     }
 
+    /* Go back button */
     .button-container {
       text-align: center;
       margin-bottom: 25px;
     }
-
     .button-container button {
       padding: 10px 25px;
       background-color: #a30016;
@@ -55,16 +122,15 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
-
     .button-container button:hover {
       background-color: #d3011c;
     }
 
+    /* Search form */
     .search-form {
       text-align: center;
       margin-bottom: 20px;
     }
-
     .search-form input[type="text"] {
       padding: 10px;
       width: 60%;
@@ -73,7 +139,6 @@
       border-radius: 6px;
       font-size: 1rem;
     }
-
     .search-form button {
       padding: 10px 16px;
       background-color: #a30016;
@@ -83,31 +148,29 @@
       margin-left: 10px;
       font-size: 1rem;
       cursor: pointer;
+      transition: background-color 0.3s ease;
     }
-
     .search-form button:hover {
       background-color: #d3011c;
     }
 
+    /* Table */
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 20px;
     }
-
     th, td {
       padding: 14px;
       border: 1px solid #ccc;
       text-align: center;
     }
-
     th {
       background-color: #a30016;
       color: white;
       font-size: 1rem;
       letter-spacing: 0.5px;
     }
-
     td img {
       width: 50px;
       height: 75px;
@@ -115,12 +178,10 @@
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       cursor: pointer;
     }
-
     td img:hover {
       transform: scale(1.2);
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
     }
-
     td button {
       padding: 6px 12px;
       background-color: #a30016;
@@ -131,14 +192,30 @@
       cursor: pointer;
       transition: background-color 0.3s;
     }
-
     td button:hover {
       background-color: #d3011c;
     }
-
   </style>
 </head>
 <body>
+
+  <!-- Floating menu button -->
+  <button class="menu-btn" id="menu-btn">☰</button>
+
+  <!-- Popup menu -->
+  <div class="popup-menu" id="popup-menu">
+    <div class="popup-content">
+      <button class="close-btn" id="close-btn">&times;</button>
+      <a href="{{ url_for('dashboard') }}"><button>Dashboard</button></a>
+      <a href="{{ url_for('my_books') }}"><button>My Books</button></a>
+      <a href="{{ url_for('notifications') }}"><button>Notifications</button></a>
+      <a href="{{ url_for('upcoming_events') }}"><button>Upcoming Events</button></a>
+      <a href="{{ url_for('manage_account') }}"><button>Account</button></a>
+      <a href="{{ url_for('logout') }}"><button>Logout</button></a>
+    </div>
+  </div>
+
+  <!-- Main content -->
   <div class="container">
     <h1>
       <img src="{{ url_for('static', filename='hawk.svg') }}" alt="Hawk" width="100" height="100">
@@ -161,28 +238,19 @@
     <table>
       <thead>
         <tr>
-          <th>Image</th>
-          <th>Title</th>
-          <th>Author</th>
-          <th>ISBN</th>
-          <th>Availability</th>
-          <th>Action</th>
+          <th>Image</th><th>Title</th><th>Author</th><th>ISBN</th><th>Availability</th><th>Action</th>
         </tr>
       </thead>
       <tbody>
         {% for book in books %}
         <tr>
-          <td>
-            <img src="https://covers.openlibrary.org/b/isbn/{{ book[0] }}-L.jpg" alt="Book Cover">
-          </td>
+          <td><img src="https://covers.openlibrary.org/b/isbn/{{ book[0] }}-L.jpg" alt="Book Cover"></td>
           <td>{{ book[1] }}</td>
           <td>{{ book[2] }}</td>
           <td>{{ book[0] }}</td>
           <td>
-            {% if book[3] == 'available' %}
-              Available
-            {% elif book[3] == 'reserved' %}
-              Reserved
+            {% if book[3] == 'available' %} Available
+            {% elif book[3] == 'reserved' %} Reserved
             {% endif %}
           </td>
           <td>
@@ -205,5 +273,18 @@
       </tbody>
     </table>
   </div>
+
+  <script>
+    const menuBtn = document.getElementById('menu-btn');
+    const popup  = document.getElementById('popup-menu');
+    const closeBtn = document.getElementById('close-btn');
+
+    menuBtn.addEventListener('click', () => {
+      popup.classList.add('active');
+    });
+    closeBtn.addEventListener('click', () => {
+      popup.classList.remove('active');
+    });
+  </script>
 </body>
 </html>
