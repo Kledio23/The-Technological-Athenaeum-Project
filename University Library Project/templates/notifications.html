@@ -11,7 +11,7 @@
             padding: 0;
             height: 100%;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-image: url('{{ url_for('static', filename='b5.jpg') }}');
+            background-image: url("{{ url_for('static', filename='b5.jpg') }}");
             background-size: cover;
             background-position: center;
             overflow-x: hidden;
@@ -158,32 +158,25 @@
 
     <div class="container">
         <div class="sidebar">
-      <a href="{{ url_for('dashboard') }}"><button>Dashboard</button></a>
-      <a href="{{ url_for('catalog') }}"><button>Catalog</button></a>
-      <a href="/my-books"><button>My Books</button></a>
-      <a href="{{ url_for('upcoming_events') }}"><button>Upcoming Events</button></a>
-      <a href="/account"><button>Manage Account</button></a>
-      <a href="{{ url_for('logout') }}"><button>Logout</button></a>
+            {% if session.get('role') == 'admin' %}
+                <a href="{{ url_for('admin_dashboard') }}"><button>Admin Dashboard</button></a>
+            {% endif %}
+            <a href="{{ url_for('dashboard') }}"><button>Dashboard</button></a>
+            <a href="{{ url_for('catalog') }}"><button>Catalog</button></a>
+            <a href="{{ url_for('my_books') }}"><button>My Books</button></a>
+            <a href="{{ url_for('upcoming_events') }}"><button>Upcoming Events</button></a>
+            <a href="{{ url_for('edit_account') }}"><button>Manage Account</button></a>
+            <a href="{{ url_for('logout') }}"><button>Logout</button></a>
         </div>
 
         <div class="main-content">
-            <div class="notification-item">
-                <h4>Library Workshop: How to Search Effectively</h4>
-                <p>Join us for a workshop where you'll learn the best techniques to search for resources in the library catalog.</p>
-                <p class="timestamp">Date: April 15, 2025</p>
-            </div>
-
-            <div class="notification-item">
-                <h4>Book Club: Monthly Discussion</h4>
-                <p>Participate in our monthly book club discussion where we'll talk about this month's read: "The Great Gatsby."</p>
-                <p class="timestamp">Date: April 20, 2025</p>
-            </div>
-
-            <div class="notification-item">
-                <h4>Summer Reading Program Sign-up</h4>
-                <p>Sign up for the Summer Reading Program and receive exclusive access to summer events, activities, and reading lists!</p>
-                <p class="timestamp">Date: May 1, 2025</p>
-            </div>
+            {% for notification in notifications|reverse %}
+                <div class="notification-item">
+                    <h4>{{ notification[1]|capitalize }}</h4>
+                    <p>{{ notification[2] }}</p>
+                    <p class="timestamp">{{ notification[5] }}</p>
+                </div>
+            {% endfor %}
         </div>
     </div>
 
