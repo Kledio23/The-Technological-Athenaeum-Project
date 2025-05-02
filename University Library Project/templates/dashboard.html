@@ -179,11 +179,14 @@
 
     <div class="container">
         <h2>Choose an Option:</h2>
-        <a href="/catalog"><button>Search for Books</button></a>
+        <a href="/catalog"><button>Catalog</button></a>
         <a href="/my-books"><button>My Books</button></a>
         <a href="/notifications"><button>Notifications</button></a>
         <a href="/upcoming-events"><button>Upcoming Events</button></a>
         <a href="/account"><button>Manage Account</button></a>
+        {% if session['role'] == 'admin' %}
+            <a href="/admin-dashboard"><button>Admin Dashboard</button></a>
+        {% endif %}
     </div>
 
     <button class="popup-btn" onclick="openPopup()">
