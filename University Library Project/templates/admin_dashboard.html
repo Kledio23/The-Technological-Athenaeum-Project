@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard - My Reserved Books</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(90deg, #a30016, #d4001f);
+      padding: 30px 20px;
+      text-align: center;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .layout {
+      display: flex;
+      flex: 1;
+      min-height: calc(100vh - 90px);
+    }
+
+    .sidebar {
+      width: 240px;
+      background-color: rgba(0, 0, 0, 0.85);
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+      color: white;
+    }
+
+    .sidebar button {
+      width: 100%;
+      padding: 12px 20px;
+      background-color: #a30016;
+      color: white;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .sidebar button:hover,
+    .sidebar .active {
+      background-color: #d3011c;
+      border-color: #999;
+    }
+
+    .container {
+      flex: 1;
+      padding: 40px;
+      max-width: 100%;
+    }
+
+    h1 {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      background-color: #a30016;
+      color: white;
+      padding: 15px 30px;
+      text-decoration: none;
+      border-radius: 10px;
+      margin-top: 20px;
+      display: block;
+      width: fit-content;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      margin-left: 34%;
+    }
+
+    .btn:hover {
+      background-color: #7a0015;
+      transform: scale(1.05);
+    }
+
+    .no-books {
+      text-align: center;
+      font-size: 20px;
+      color: #777;
+      margin-top: 60px;
+    }
+
+    .book-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      padding: 0;
+      list-style: none;
+    }
+
+    .book-item {
+      background: #ffffff;
+      width: 240px;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .book-item:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .book-item img {
+      width: 150px;
+      height: 220px;
+      object-fit: cover;
+      margin-bottom: 15px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background-color: #ddd;
+    }
+
+    .book-item h2 {
+      font-size: 18px;
+      margin-bottom: 8px;
+      color: #222;
+    }
+
+    .book-item p {
+      margin: 4px 0;
+      color: #555;
+      font-size: 14px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Admin Dashboard</h1>
+  </header>
+
+  <div class="layout">
+
+    <div class="sidebar">
+        {% if session.get('role') == 'admin' %}
+            <a href="{{ url_for('admin_dashboard') }}"><button>Admin Dashboard</button></a>
+        {% endif %}
+        <a href="{{ url_for('dashboard') }}"><button>Dashboard</button></a>
+        <a href="{{ url_for('catalog') }}"><button>Catalog</button></a>
+        <a href="{{ url_for('notifications') }}"><button>Notifications</button></a>
+        <a href="{{ url_for('upcoming_events') }}"><button>Upcoming Events</button></a>
+        <a href="{{ url_for('edit_account') }}"><button>Manage Account</button></a>
+        <a href="{{ url_for('logout') }}"><button>Logout</button></a>
+    </div>
+
+    <div class="container">
+        <a href="{{ url_for('modify_books') }}" class="btn">Modify Books</a>
+        <a href="{{ url_for('modify_events') }}" class="btn">Modify Events</a>
+    </div>
+
+  </div>
+
+</body>
+</html>

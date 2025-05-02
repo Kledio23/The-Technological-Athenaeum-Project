@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Two-Factor Authentication</title>
+</head>
+<body>
+    <h2>Enter the 2FA Code</h2>
+    <p>Enter the 6-digit code from your Google Authenticator app to complete the login process:</p>
+
+    {% if error %}
+    <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="post">
+        <input type="text" name="code" required>
+        <button type="submit">Verify</button>
+    </form>
+</body>
+</html>

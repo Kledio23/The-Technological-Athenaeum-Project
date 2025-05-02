@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enable Two-Factor Authentication</title>
+</head>
+<body>
+    <h2>Enable Two-Factor Authentication (2FA)</h2>
+    <p>To secure your account, scan the QR code below with your Google Authenticator app:</p>
+    
+    <div>
+        <img src="data:image/png;base64,{{ img_base64 }}" alt="QR Code">
+    </div>
+
+    <p>After scanning, enter the 6-digit code from your Google Authenticator app:</p>
+
+    <form method="post">
+        <button type="submit">Verify 2FA</button>
+    </form>
+</body>
+</html>

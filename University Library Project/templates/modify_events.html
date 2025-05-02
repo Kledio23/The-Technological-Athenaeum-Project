@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #a30016;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding: 20px;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #a30016;
+            color: white;
+            padding: 20px;
+        }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .sidebar a:hover {
+            background-color: #7a0015;
+        }
+
+        .add-event {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 1000px;
+            width: 100%;
+            padding: 20px;
+            margin-left: 20px;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            background-color: #a30016;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: inline-block;
+            width: auto;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #7a0015;
+            transform: scale(1.05);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        input, textarea {
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+
+        .success {
+            color: green;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ccc;
+        }
+
+        table th {
+            background-color: #a30016;
+            color: white;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-start;
+        }
+
+        .actions a, .actions button {
+            padding: 10px 15px;
+            background-color: #a30016;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .actions a:hover, .actions button:hover {
+            background-color: #7a0015;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            width: 500px;
+        }
+
+        .popup-content input, .popup-content textarea {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .popup-content .btn {
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .popup-content .cancel-btn {
+            background-color: #ccc;
+            margin-left: 10px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Admin Dashboard</h1>
+    </header>
+
+    <div class="container">
+        <div class="sidebar">
+            <h3>Dashboard</h3>
+            {% if session.get('role') == 'admin' %}
+                <a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a>
+            {% endif %}
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('catalog') }}">Catalog</a>
+            <a href="{{ url_for('notifications') }}">Notifications</a>
+            <a href="{{ url_for('upcoming_events') }}">Upcoming Events</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+
+        <div>
+            <div class="add-event">
+                <h2>Add New Event</h2>
+                <form action="{{ url_for('modify_events') }}" method="POST">
+                    <label for="event">Event Name:</label>
+                    <input type="text" id="event" name="event" required>
+                    <label for="date">Event Date:</label>
+                    <input type="date" id="date" name="date" required>
+                    <label for="location">Event Location:</label>
+                    <input type="text" id="location" name="location" required>
+                    <label for="description">Event Description:</label>
+                    <textarea id="description" name="description" required></textarea>
+                    <button type="submit" class="btn">Add Event</button>
+                </form>
+            </div>
+
+            <div class="add-event">
+                <h2>Events in Library</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event Name</th>
+                            <th>Date</th>
+                            <th>Location</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for event in events %}
+                            <tr id="event-{{ event[0] }}" class="event-row">
+                                <td>{{ event[1] }}</td>
+                                <td>{{ event[2] }}</td>
+                                <td>{{ event[3] }}</td>
+                                <td>{{ event[4] }}</td>
+                                <td class="actions">
+                                    <button type="button" class="btn edit-btn" onclick="openEditPopup('{{ event[0] }}')">Edit</button>
+                                    <form action="{{ url_for('remove_event', event=event[1]) }}" method="POST" style="display: inline;">
+                                        <button type="submit" class="btn" onclick="return confirm('Are you sure you want to delete this event?');">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="editPopup" class="popup">
+        <div class="popup-content">
+            <span class="close-btn" onclick="closeEditPopup()">&times;</span>
+            <h2>Edit Event</h2>
+            <form id="editForm" action="{{ url_for('edit_event', event_id='') }}" method="POST">
+                <input type="hidden" name="old_event" id="popupOldEvent">
+                <label for="popupEvent">Event Name:</label>
+                <input type="text" id="popupEvent" name="event" required>
+                <label for="popupDate">Date:</label>
+                <input type="date" id="popupDate" name="date" required>
+                <label for="popupLocation">Location:</label>
+                <input type="text" id="popupLocation" name="location" required>
+                <label for="popupDescription">Description:</label>
+                <textarea id="popupDescription" name="description" required></textarea>
+                <button type="submit" class="btn">Save Changes</button>
+                <button type="button" class="btn cancel-btn" onclick="closeEditPopup()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openEditPopup(event_id) {
+            const row = document.getElementById('event-' + event_id);
+            const event_name = row.querySelector('td:nth-child(1)').textContent;
+            const event_date = row.querySelector('td:nth-child(2)').textContent;
+            const event_location = row.querySelector('td:nth-child(3)').textContent;
+            const event_description = row.querySelector('td:nth-child(4)').textContent;
+
+            document.getElementById('popupOldEvent').value = event_id;
+            document.getElementById('popupEvent').value = event_name;
+            document.getElementById('popupDate').value = event_date;
+            document.getElementById('popupLocation').value = event_location;
+            document.getElementById('popupDescription').value = event_description;
+
+            const formAction = "{{ url_for('edit_event', event_id='') }}" + event_id;
+            document.getElementById('editForm').action = formAction;
+
+            document.getElementById('editPopup').style.display = 'flex';
+        }
+
+        function closeEditPopup() {
+            document.getElementById('editPopup').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
